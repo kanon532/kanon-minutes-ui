@@ -1,7 +1,7 @@
 {
   "state": "processing",
-  "stage": "Wordを読み込み中",
-  "progress": 18,
-  "message": "文字起こしWordとExcel雛形を確認しています。",
-  "updated_at": "2026-10-08T21:40:25.908668+09:00"
+  "stage": "AIが会話を整理中",
+  "progress": 38,
+  "message": "会話を読み取り、発言の流れを整理しています。",
+  "updated_at": "2026-10-08T21:40:28.667229+09:00"
 }
