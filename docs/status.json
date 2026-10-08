@@ -1,7 +1,7 @@
 {
-  "state": "completed",
-  "stage": "完成",
-  "progress": 100,
-  "message": "議事録Excelの作成とDropbox保存が完了しました。",
-  "updated_at": "2026-10-08T20:50:02.225040+09:00"
+  "state": "processing",
+  "stage": "処理を受け付けました",
+  "progress": 8,
+  "message": "未処理WordとExcel雛形を確認しています。",
+  "updated_at": "2026-10-08T21:25:17.238011+09:00"
 }
