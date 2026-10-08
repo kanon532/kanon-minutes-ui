@@ -1,0 +1,14 @@
+{
+  "name": "カノン議事録AI",
+  "short_name": "議事録AI",
+  "description": "iPadから文字起こしWordを選び、AIで議事録Excelを自動作成する業務アプリ",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f5f8fc",
+  "theme_color": "#071a3b",
+  "icons": [
+    {"src":"./icon-192.png","sizes":"192x192","type":"image/png"},
+    {"src":"./icon-512.png","sizes":"512x512","type":"image/png"}
+  ]
+}
