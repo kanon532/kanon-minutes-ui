@@ -156,7 +156,11 @@
 <script>
   const HISTORY_KEY='kanon_minutes_launch_history_v2';
   const LAST_START_KEY='kanon_minutes_last_start_v2';
-  const STATUS_URL='https://raw.githubusercontent.com/kanon532/kanon-minutes-ui/main/docs/status.json';
+  const STATUS_URLS=[
+    'https://raw.githubusercontent.com/kanon532/kanon-minutes-ui/main/docs/status.json',
+    './status.json'
+  ];
+  let lastStatusSyncAt=0;
   const CREATE_SHORTCUT='カノン議事録AI 作成';
   const DONE_SHORTCUT='カノン議事録AI 確認';
   const views=[...document.querySelectorAll('.view')];
@@ -209,8 +213,17 @@
       statusStage.textContent=s?.message||'元のWordは未処理フォルダに残っています。';
       statusOrb.textContent='!'; statusOrb.classList.add('err'); progressBar.style.width='100%'; statusActions.classList.add('show');
     }else if(state==='processing'||state==='starting'){
-      statusTitle.textContent='AIが議事録を作成中です';
+      if(state==='starting' && progress<=12){
+        statusTitle.textContent='処理開始を確認中です';
+      }else{
+        statusTitle.textContent='AIが議事録を作成中です';
+      }
       statusStage.textContent=s?.stage||s?.message||'処理中です。';
+      statusOrb.textContent='↻'; statusOrb.classList.add('spin');
+      document.getElementById('refreshStatus').parentElement.classList.add('show');
+    }else if(state==='status_error'){
+      statusTitle.textContent='処理状況を再取得しています';
+      statusStage.textContent=s?.message||'通信状態を確認して自動で再取得します。';
       statusOrb.textContent='↻'; statusOrb.classList.add('spin');
       document.getElementById('refreshStatus').parentElement.classList.add('show');
     }else if(state==='empty'){
@@ -224,16 +237,28 @@
     }
   }
 
+  async function loadRemoteStatus(){
+    let lastError=null;
+    for(const base of STATUS_URLS){
+      try{
+        const sep=base.includes('?')?'&':'?';
+        const res=await fetch(base+sep+'t='+Date.now(),{cache:'no-store',mode:'cors'});
+        if(!res.ok)throw new Error('status '+res.status);
+        return await res.json();
+      }catch(e){lastError=e}
+    }
+    throw lastError||new Error('status fetch failed');
+  }
+
   async function fetchStatus(){
     try{
-      const res=await fetch(STATUS_URL+'?t='+Date.now(),{cache:'no-store'});
-      if(!res.ok)throw new Error('status '+res.status);
-      const s=await res.json();
+      const s=await loadRemoteStatus();
+      lastStatusSyncAt=Date.now();
       const localStart=localStorage.getItem(LAST_START_KEY);
       if(localStart && s?.updated_at){
         const a=new Date(localStart).getTime(), b=new Date(s.updated_at).getTime();
         if(Number.isFinite(a)&&Number.isFinite(b)&&b+5000<a){
-          renderStatus({state:'starting',stage:'処理受付待ち',progress:10,message:'ファイル選択後の受付を待っています。',updated_at:localStart});
+          renderStatus({state:'starting',stage:'処理受付待ち',progress:10,message:'ファイル選択後の受付を確認しています。',updated_at:localStart});
           return;
         }
       }
@@ -241,20 +266,32 @@
       if(s?.state==='completed'||s?.state==='failed'||s?.state==='empty')localStorage.removeItem(LAST_START_KEY);
     }catch(e){
       const localStart=localStorage.getItem(LAST_START_KEY);
-      if(localStart) renderStatus({state:'starting',stage:'状態取得待ち',progress:12,message:'バックエンドの状態を確認しています。',updated_at:localStart});
-      else renderStatus({state:'idle'});
+      renderStatus({state:'status_error',stage:'状態取得待ち',progress:localStart?12:0,message:'処理状況を取得できません。数秒後に自動で再試行します。',updated_at:localStart||new Date().toISOString()});
     }
   }
+
+  function refreshStatusNow(){
+    fetchStatus();
+    setTimeout(fetchStatus,350);
+    setTimeout(fetchStatus,1200);
+    setTimeout(fetchStatus,3000);
+  }
+
 
   document.getElementById('openDoneFromStatus').addEventListener('click',()=>runShortcut(DONE_SHORTCUT));
   document.getElementById('refreshStatus').addEventListener('click',()=>{showToast('状態を更新します');fetchStatus()});
 
   function updateNet(){const on=navigator.onLine;document.getElementById('netDot').classList.toggle('off',!on);document.getElementById('netText').textContent=on?'オンライン':'オフライン'}
-  addEventListener('online',()=>{updateNet();fetchStatus()});addEventListener('offline',updateNet);updateNet();renderHistory();fetchStatus();
-  setInterval(fetchStatus,5000);
-  document.addEventListener('visibilitychange',()=>{if(!document.hidden)fetchStatus()});
+  addEventListener('online',()=>{updateNet();refreshStatusNow()});
+  addEventListener('offline',updateNet);
+  addEventListener('pageshow',refreshStatusNow);
+  addEventListener('focus',refreshStatusNow);
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden)refreshStatusNow()});
+  document.addEventListener('touchstart',()=>{if(Date.now()-lastStatusSyncAt>5000)fetchStatus()},{passive:true});
+  updateNet();renderHistory();refreshStatusNow();
+  setInterval(()=>{if(!document.hidden)fetchStatus()},3000);
   const standalone=window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone===true;if(!standalone)document.getElementById('installBox').classList.add('show');
-  if('serviceWorker' in navigator)navigator.serviceWorker.register('./sw.js').catch(()=>{});
+  if('serviceWorker' in navigator)navigator.serviceWorker.register('./sw.js?v=4').catch(()=>{});
 </script>
 </body>
 </html>
