@@ -47,7 +47,7 @@
     .toast{position:fixed;z-index:60;left:50%;bottom:calc(92px + env(safe-area-inset-bottom));transform:translate(-50%,20px);background:#071a3b;color:#fff;padding:13px 16px;border-radius:14px;font-size:12px;font-weight:800;opacity:0;pointer-events:none;transition:.25s;box-shadow:0 14px 34px rgba(7,26,59,.24)}.toast.show{opacity:1;transform:translate(-50%,0)}
     .install{display:none;margin:14px 0 0;background:#e7f5ff;border:1px solid #a5d8ff;border-radius:18px;padding:14px;color:#164b74;font-size:12px;line-height:1.6}.install.show{display:block}
     .live-status{margin-top:16px;background:#fff;border:1px solid var(--line);border-radius:24px;padding:18px 18px 16px;box-shadow:0 10px 30px rgba(7,26,59,.08);position:relative;z-index:2;color:var(--ink)}
-    .live-status-head{display:flex;align-items:center;justify-content:space-between;gap:12px}.live-status-left{display:flex;align-items:center;gap:12px;min-width:0}.status-orb{width:42px;height:42px;border-radius:14px;background:#edf4ff;color:#1268ff;display:grid;place-items:center;font-weight:900;flex:0 0 auto}.status-orb.spin{animation:spin 1.3s linear infinite}.status-orb.ok{background:#e9fbf5;color:#087f5b}.status-orb.err{background:#fff0f0;color:#c92a2a}.live-status h4{margin:0;font-size:15px}.live-status p{margin:4px 0 0;color:var(--muted);font-size:12px;line-height:1.45}.status-time{font-size:11px;color:var(--muted);white-space:nowrap}.progress-track{height:8px;border-radius:999px;background:#e9eef5;overflow:hidden;margin-top:14px}.progress-bar{height:100%;width:0;background:linear-gradient(90deg,#1268ff,#57c1ff);transition:width .45s ease}.status-actions{display:none;margin-top:13px;gap:8px}.status-actions.show{display:flex}.status-mini-btn{border:0;border-radius:13px;padding:10px 13px;font-weight:800;font-size:12px;cursor:pointer}.status-mini-btn.primary{background:#1268ff;color:#fff}.status-mini-btn.ghost{background:#eef4ff;color:#134d9e}@keyframes spin{to{transform:rotate(360deg)}}
+    .live-status-head{display:flex;align-items:center;justify-content:space-between;gap:12px}.live-status-left{display:flex;align-items:center;gap:12px;min-width:0}.status-orb{width:42px;height:42px;border-radius:14px;background:#edf4ff;color:#1268ff;display:grid;place-items:center;font-weight:900;flex:0 0 auto}.status-orb.spin{animation:spin 1.3s linear infinite}.status-orb.ok{background:#e9fbf5;color:#087f5b}.status-orb.err{background:#fff0f0;color:#c92a2a}.live-status h4{margin:0;font-size:15px}.live-status p{margin:4px 0 0;color:var(--muted);font-size:12px;line-height:1.45}.status-time{font-size:11px;color:var(--muted);white-space:nowrap}.progress-wrap{display:flex;align-items:center;gap:12px;margin-top:14px}.progress-track{height:8px;border-radius:999px;background:#e9eef5;overflow:hidden;flex:1}.progress-bar{height:100%;width:0;background:linear-gradient(90deg,#1268ff,#57c1ff);transition:width .45s ease}.progress-value{min-width:42px;text-align:right;font-size:12px;font-weight:900;color:#1268ff;font-variant-numeric:tabular-nums}.status-actions{display:none;margin-top:13px;gap:8px}.status-actions.show{display:flex}.status-mini-btn{border:0;border-radius:13px;padding:10px 13px;font-weight:800;font-size:12px;cursor:pointer}.status-mini-btn.primary{background:#1268ff;color:#fff}.status-mini-btn.ghost{background:#eef4ff;color:#134d9e}@keyframes spin{to{transform:rotate(360deg)}}
     @media(max-width:760px){main{padding:16px 14px 0}.topbar{padding-left:15px;padding-right:15px}.hero{padding:25px 20px;border-radius:26px}.quick{grid-column:span 6}.status-card,.help-card{grid-column:span 12}.flow{grid-template-columns:1fr}.chev{transform:rotate(90deg);text-align:center}.step{min-height:auto}.brand h1{font-size:18px}.net span:last-child{display:none}}
   </style>
 </head>
@@ -81,7 +81,7 @@
           </div>
           <div id="statusTime" class="status-time">--:--</div>
         </div>
-        <div class="progress-track"><div id="progressBar" class="progress-bar"></div></div>
+        <div class="progress-wrap"><div class="progress-track"><div id="progressBar" class="progress-bar"></div></div><div id="progressValue" class="progress-value">0%</div></div>
         <div id="statusActions" class="status-actions">
           <button id="openDoneFromStatus" class="status-mini-btn primary">完成議事録を開く</button>
           <button id="refreshStatus" class="status-mini-btn ghost">状態を再確認</button>
@@ -171,6 +171,7 @@
   const statusTime=document.getElementById('statusTime');
   const statusOrb=document.getElementById('statusOrb');
   const progressBar=document.getElementById('progressBar');
+  const progressValue=document.getElementById('progressValue');
   const statusActions=document.getElementById('statusActions');
 
   function showToast(msg){toast.textContent=msg;toast.classList.add('show');setTimeout(()=>toast.classList.remove('show'),2200)}
@@ -184,8 +185,9 @@
   function renderHistory(){const h=getHistory();const html=h.length?h.map(x=>`<div class="history-item"><div class="history-left"><div class="hist-icon">AI</div><div><b>${x.label}</b><small>${fmt(x.at)}</small></div></div><span class="badge wait">開始済み</span></div>`).join(''):'<div class="empty">まだ履歴はありません。</div>';const a=document.getElementById('historyList');const b=document.getElementById('historyDone');if(a)a.innerHTML=html;if(b)b.innerHTML=html}
 
   function setLocalStarting(){
-    localStorage.setItem(LAST_START_KEY,new Date().toISOString());
-    renderStatus({state:'starting',stage:'ファイル選択・処理受付',progress:8,message:'Wordを選択後、Dropbox保存とAI処理の開始を待っています。',updated_at:new Date().toISOString()});
+    const now=new Date().toISOString();
+    localStorage.setItem(LAST_START_KEY,now);
+    renderStatus({state:'selecting',stage:'Wordを選択してください',progress:0,message:'ショートカットで文字起こしWordを選択しています。',updated_at:now});
   }
 
   function runShortcut(name){
@@ -201,17 +203,23 @@
     const state=s?.state||'idle';
     const progress=Math.max(0,Math.min(100,Number(s?.progress||0)));
     progressBar.style.width=progress+'%';
+    progressValue.textContent=Math.round(progress)+'%';
     statusTime.textContent=s?.updated_at?'更新 '+hhmm(s.updated_at):'--:--';
     statusActions.classList.remove('show');
     statusOrb.className='status-orb';
-    if(state==='completed'){
+    if(state==='selecting'){
+      statusTitle.textContent='Wordを選択してください';
+      statusStage.textContent=s?.message||'ショートカットで文字起こしWordを選択しています。';
+      statusOrb.textContent='＋';
+      progressBar.style.width='0%'; progressValue.textContent='0%';
+    }else if(state==='completed'){
       statusTitle.textContent='議事録が完成しました';
       statusStage.textContent=s?.message||'ExcelをDropboxへ保存しました。';
-      statusOrb.textContent='✓'; statusOrb.classList.add('ok'); progressBar.style.width='100%'; statusActions.classList.add('show');
+      statusOrb.textContent='✓'; statusOrb.classList.add('ok'); progressBar.style.width='100%'; progressValue.textContent='100%'; statusActions.classList.add('show');
     }else if(state==='failed'){
       statusTitle.textContent='処理でエラーが発生しました';
       statusStage.textContent=s?.message||'元のWordは未処理フォルダに残っています。';
-      statusOrb.textContent='!'; statusOrb.classList.add('err'); progressBar.style.width='100%'; statusActions.classList.add('show');
+      statusOrb.textContent='!'; statusOrb.classList.add('err'); progressBar.style.width='100%'; progressValue.textContent='100%'; statusActions.classList.add('show');
     }else if(state==='processing'||state==='starting'){
       if(state==='starting' && progress<=12){
         statusTitle.textContent='処理開始を確認中です';
@@ -221,6 +229,11 @@
       statusStage.textContent=s?.stage||s?.message||'処理中です。';
       statusOrb.textContent='↻'; statusOrb.classList.add('spin');
       document.getElementById('refreshStatus').parentElement.classList.add('show');
+    }else if(state==='not_started'){
+      statusTitle.textContent='処理開始を確認できません';
+      statusStage.textContent=s?.message||'Word選択がキャンセルされたか、送信に失敗した可能性があります。';
+      statusOrb.textContent='!'; statusOrb.classList.add('err');
+      progressBar.style.width='0%'; progressValue.textContent='0%';
     }else if(state==='status_error'){
       statusTitle.textContent='処理状況を再取得しています';
       statusStage.textContent=s?.message||'通信状態を確認して自動で再取得します。';
@@ -229,11 +242,11 @@
     }else if(state==='empty'){
       statusTitle.textContent='処理対象のWordがありません';
       statusStage.textContent=s?.message||'01_文字起こしに未処理Wordがありません。';
-      statusOrb.textContent='−'; progressBar.style.width='0%'; statusActions.classList.add('show');
+      statusOrb.textContent='−'; progressBar.style.width='0%'; progressValue.textContent='0%'; statusActions.classList.add('show');
     }else{
       statusTitle.textContent='待機中';
       statusStage.textContent='「議事録を作成」からWordを選択してください。';
-      statusOrb.textContent='•'; progressBar.style.width='0%';
+      statusOrb.textContent='•'; progressBar.style.width='0%'; progressValue.textContent='0%';
     }
   }
 
@@ -258,7 +271,12 @@
       if(localStart && s?.updated_at){
         const a=new Date(localStart).getTime(), b=new Date(s.updated_at).getTime();
         if(Number.isFinite(a)&&Number.isFinite(b)&&b+5000<a){
-          renderStatus({state:'starting',stage:'処理受付待ち',progress:10,message:'ファイル選択後の受付を確認しています。',updated_at:localStart});
+          const elapsed=Date.now()-a;
+          if(elapsed<60000){
+            renderStatus({state:'starting',stage:'処理受付を確認中',progress:5,message:'Word選択後、クラウド側の処理開始を確認しています。',updated_at:localStart});
+          }else{
+            renderStatus({state:'not_started',stage:'処理未確認',progress:0,message:'処理開始を確認できません。Word選択をキャンセルした場合は、もう一度「議事録を作成」を押してください。',updated_at:localStart});
+          }
           return;
         }
       }
@@ -291,7 +309,7 @@
   updateNet();renderHistory();refreshStatusNow();
   setInterval(()=>{if(!document.hidden)fetchStatus()},3000);
   const standalone=window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone===true;if(!standalone)document.getElementById('installBox').classList.add('show');
-  if('serviceWorker' in navigator)navigator.serviceWorker.register('./sw.js?v=4').catch(()=>{});
+  if('serviceWorker' in navigator)navigator.serviceWorker.register('./sw.js?v=6').catch(()=>{});
 </script>
 </body>
 </html>
