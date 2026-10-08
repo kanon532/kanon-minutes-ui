@@ -1,7 +1,7 @@
 {
-  "state": "processing",
-  "stage": "Dropboxへ保存中",
-  "progress": 95,
-  "message": "完成したExcelをDropboxへ保存しています。",
-  "updated_at": "2026-10-08T20:49:58.578857+09:00"
+  "state": "completed",
+  "stage": "完成",
+  "progress": 100,
+  "message": "議事録Excelの作成とDropbox保存が完了しました。",
+  "updated_at": "2026-10-08T20:50:02.225040+09:00"
 }
