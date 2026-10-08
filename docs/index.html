@@ -46,8 +46,6 @@
     .bottomnav{position:fixed;left:50%;bottom:0;transform:translateX(-50%);z-index:40;width:min(1024px,100%);padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:rgba(255,255,255,.9);backdrop-filter:blur(22px);border-top:1px solid rgba(223,231,241,.92);display:grid;grid-template-columns:repeat(4,1fr);gap:7px}.navbtn{border:0;background:transparent;border-radius:16px;padding:8px 5px;color:#79879a;font-size:11px;font-weight:800;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer}.navbtn .navico{font-size:19px}.navbtn.active{background:#edf4ff;color:#105cca}
     .toast{position:fixed;z-index:60;left:50%;bottom:calc(92px + env(safe-area-inset-bottom));transform:translate(-50%,20px);background:#071a3b;color:#fff;padding:13px 16px;border-radius:14px;font-size:12px;font-weight:800;opacity:0;pointer-events:none;transition:.25s;box-shadow:0 14px 34px rgba(7,26,59,.24)}.toast.show{opacity:1;transform:translate(-50%,0)}
     .install{display:none;margin:14px 0 0;background:#e7f5ff;border:1px solid #a5d8ff;border-radius:18px;padding:14px;color:#164b74;font-size:12px;line-height:1.6}.install.show{display:block}
-    .live-status{margin-top:16px;background:#fff;border:1px solid var(--line);border-radius:24px;padding:18px 18px 16px;box-shadow:0 10px 30px rgba(7,26,59,.08);position:relative;z-index:2;color:var(--ink)}
-    .live-status-head{display:flex;align-items:center;justify-content:space-between;gap:12px}.live-status-left{display:flex;align-items:center;gap:12px;min-width:0}.status-orb{width:42px;height:42px;border-radius:14px;background:#edf4ff;color:#1268ff;display:grid;place-items:center;font-weight:900;flex:0 0 auto}.status-orb.spin{animation:spin 1.3s linear infinite}.status-orb.ok{background:#e9fbf5;color:#087f5b}.status-orb.err{background:#fff0f0;color:#c92a2a}.live-status h4{margin:0;font-size:15px}.live-status p{margin:4px 0 0;color:var(--muted);font-size:12px;line-height:1.45}.status-time{font-size:11px;color:var(--muted);white-space:nowrap}.progress-wrap{display:flex;align-items:center;gap:12px;margin-top:14px}.progress-track{height:8px;border-radius:999px;background:#e9eef5;overflow:hidden;flex:1}.progress-bar{height:100%;width:0;background:linear-gradient(90deg,#1268ff,#57c1ff);transition:width .45s ease}.progress-value{min-width:42px;text-align:right;font-size:12px;font-weight:900;color:#1268ff;font-variant-numeric:tabular-nums}.status-actions{display:none;margin-top:13px;gap:8px}.status-actions.show{display:flex}.status-mini-btn{border:0;border-radius:13px;padding:10px 13px;font-weight:800;font-size:12px;cursor:pointer}.status-mini-btn.primary{background:#1268ff;color:#fff}.status-mini-btn.ghost{background:#eef4ff;color:#134d9e}@keyframes spin{to{transform:rotate(360deg)}}
     @media(max-width:760px){main{padding:16px 14px 0}.topbar{padding-left:15px;padding-right:15px}.hero{padding:25px 20px;border-radius:26px}.quick{grid-column:span 6}.status-card,.help-card{grid-column:span 12}.flow{grid-template-columns:1fr}.chev{transform:rotate(90deg);text-align:center}.step{min-height:auto}.brand h1{font-size:18px}.net span:last-child{display:none}}
   </style>
 </head>
@@ -73,25 +71,10 @@
         <div id="installBox" class="install"><strong>ホーム画面に追加できます。</strong><br>Safariの共有ボタン →「ホーム画面に追加」で、通常のアプリのように起動できます。</div>
       </div>
 
-      <div id="liveStatus" class="live-status">
-        <div class="live-status-head">
-          <div class="live-status-left">
-            <div id="statusOrb" class="status-orb">•</div>
-            <div><h4 id="statusTitle">処理状況を確認しています</h4><p id="statusStage">バックエンドの状態を取得中です。</p></div>
-          </div>
-          <div id="statusTime" class="status-time">--:--</div>
-        </div>
-        <div class="progress-wrap"><div class="progress-track"><div id="progressBar" class="progress-bar"></div></div><div id="progressValue" class="progress-value">0%</div></div>
-        <div id="statusActions" class="status-actions">
-          <button id="openDoneFromStatus" class="status-mini-btn primary">完成議事録を開く</button>
-          <button id="refreshStatus" class="status-mini-btn ghost">状態を再確認</button>
-        </div>
-      </div>
-
       <div class="section-title"><h3>クイック操作</h3><span>よく使う操作</span></div>
       <div class="grid">
-        <div class="card quick" data-shortcut="カノン議事録AI 作成"><div class="ico">＋</div><div><h4>新規議事録</h4><p>Wordを選択してAI処理を開始</p></div><div class="arrow">›</div></div>
-        <div class="card quick" data-shortcut="カノン議事録AI 確認"><div class="ico">✓</div><div><h4>完成議事録</h4><p>Dropboxの完成フォルダを開く</p></div><div class="arrow">›</div></div>
+        <div class="card quick" data-view="create"><div class="ico">＋</div><div><h4>新規議事録</h4><p>Wordを選択してAI処理を開始</p></div><div class="arrow">›</div></div>
+        <div class="card quick" data-view="done"><div class="ico">✓</div><div><h4>完成議事録</h4><p>Dropboxの完成フォルダを開く</p></div><div class="arrow">›</div></div>
         <div class="card quick" data-view="history"><div class="ico">↻</div><div><h4>処理履歴</h4><p>このiPadから開始した履歴を確認</p></div><div class="arrow">›</div></div>
       </div>
 
@@ -114,7 +97,7 @@
       <div class="launch">
         <div class="orb">＋</div><h3>文字起こしWordを選ぶ</h3>
         <p>「議事録作成」を起動すると、ファイル選択画面が開きます。選択後はDropboxへ保存し、AI処理を自動で開始します。</p>
-        <a class="btn blue wide" href="#" data-shortcut="カノン議事録AI 作成">議事録作成を開始</a>
+        <button class="btn ghost wide" data-view="home">ホームに戻る</button>
         <div class="tip">💡 処理開始後はiPadをオフラインにしても、クラウド側の処理は継続します。</div>
       </div>
       <div class="section-title"><h3>作成される内容</h3></div>
@@ -123,7 +106,7 @@
 
     <section id="done" class="view">
       <div class="panel-head"><div><h2>完成議事録</h2><p>Dropboxの「03_完成議事録」を開きます</p></div><span class="badge info">DROPBOX</span></div>
-      <div class="launch"><div class="orb">✓</div><h3>完成したExcelを確認</h3><p>完成ファイルはDropboxへ自動保存されます。ここから直接、完成議事録フォルダを開けます。</p><a class="btn blue wide" href="#" data-shortcut="カノン議事録AI 確認">完成議事録を開く</a></div>
+      <div class="launch"><div class="orb">✓</div><h3>完成したExcelを確認</h3><p>完成ファイルはDropboxへ自動保存されます。ここから直接、完成議事録フォルダを開けます。</p><button class="btn ghost wide" data-view="home">ホームに戻る</button></div>
       <div class="section-title"><h3>このiPadの処理開始履歴</h3></div><div id="historyDone" class="history"></div>
     </section>
 
@@ -154,162 +137,48 @@
 </nav>
 <div id="toast" class="toast"></div>
 <script>
-  const HISTORY_KEY='kanon_minutes_launch_history_v2';
-  const LAST_START_KEY='kanon_minutes_last_start_v2';
-  const STATUS_URLS=[
-    'https://raw.githubusercontent.com/kanon532/kanon-minutes-ui/main/docs/status.json',
-    './status.json'
-  ];
-  let lastStatusSyncAt=0;
+  const HISTORY_KEY='kanon_minutes_launch_history_simple_v1';
   const CREATE_SHORTCUT='カノン議事録AI 作成';
   const DONE_SHORTCUT='カノン議事録AI 確認';
   const views=[...document.querySelectorAll('.view')];
   const navs=[...document.querySelectorAll('.navbtn')];
   const toast=document.getElementById('toast');
-  const statusTitle=document.getElementById('statusTitle');
-  const statusStage=document.getElementById('statusStage');
-  const statusTime=document.getElementById('statusTime');
-  const statusOrb=document.getElementById('statusOrb');
-  const progressBar=document.getElementById('progressBar');
-  const progressValue=document.getElementById('progressValue');
-  const statusActions=document.getElementById('statusActions');
 
   function showToast(msg){toast.textContent=msg;toast.classList.add('show');setTimeout(()=>toast.classList.remove('show'),2200)}
-  function showView(id){views.forEach(v=>v.classList.toggle('active',v.id===id));navs.forEach(n=>n.classList.toggle('active',n.dataset.view===id));window.scrollTo({top:0,behavior:'smooth'});if(id==='history'||id==='done')renderHistory()}
+  function showView(id){
+    views.forEach(v=>v.classList.toggle('active',v.id===id));
+    navs.forEach(n=>n.classList.toggle('active',n.dataset.view===id));
+    window.scrollTo({top:0,behavior:'smooth'});
+    if(id==='history'||id==='done')renderHistory();
+  }
   document.querySelectorAll('[data-view]').forEach(el=>el.addEventListener('click',()=>showView(el.dataset.view)));
 
   function getHistory(){try{return JSON.parse(localStorage.getItem(HISTORY_KEY)||'[]')}catch{return[]}}
   function saveHistory(x){localStorage.setItem(HISTORY_KEY,JSON.stringify(x.slice(0,20)))}
   function addHistory(){const h=getHistory();h.unshift({id:Date.now(),at:new Date().toISOString(),label:'議事録作成を開始'});saveHistory(h);renderHistory()}
   function fmt(iso){const d=new Date(iso);return new Intl.DateTimeFormat('ja-JP',{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'}).format(d)}
-  function renderHistory(){const h=getHistory();const html=h.length?h.map(x=>`<div class="history-item"><div class="history-left"><div class="hist-icon">AI</div><div><b>${x.label}</b><small>${fmt(x.at)}</small></div></div><span class="badge wait">開始済み</span></div>`).join(''):'<div class="empty">まだ履歴はありません。</div>';const a=document.getElementById('historyList');const b=document.getElementById('historyDone');if(a)a.innerHTML=html;if(b)b.innerHTML=html}
-
-  function setLocalStarting(){
-    const now=new Date().toISOString();
-    localStorage.setItem(LAST_START_KEY,now);
-    renderStatus({state:'selecting',stage:'Wordを選択してください',progress:0,message:'ショートカットで文字起こしWordを選択しています。',updated_at:now});
+  function renderHistory(){
+    const h=getHistory();
+    const html=h.length?h.map(x=>`<div class="history-item"><div class="history-left"><div class="hist-icon">AI</div><div><b>${x.label}</b><small>${fmt(x.at)}</small></div></div><span class="badge wait">開始済み</span></div>`).join(''):'<div class="empty">まだ履歴はありません。</div>';
+    const a=document.getElementById('historyList');const b=document.getElementById('historyDone');if(a)a.innerHTML=html;if(b)b.innerHTML=html;
   }
 
   function runShortcut(name){
-    if(name===CREATE_SHORTCUT){addHistory();setLocalStarting()}
+    if(name===CREATE_SHORTCUT)addHistory();
     showToast(name+' を開きます');
-    setTimeout(()=>{location.href='shortcuts://run-shortcut?name='+encodeURIComponent(name)},180)
+    setTimeout(()=>{location.href='shortcuts://run-shortcut?name='+encodeURIComponent(name)},180);
   }
-  document.querySelectorAll('[data-shortcut]').forEach(el=>el.addEventListener('click',e=>{e.preventDefault();runShortcut(el.dataset.shortcut)}));
+
+  // TOPの2ボタンだけショートカットを起動
+  document.querySelectorAll('.hero [data-shortcut]').forEach(el=>el.addEventListener('click',e=>{e.preventDefault();runShortcut(el.dataset.shortcut)}));
+
   document.getElementById('clearHistory').addEventListener('click',()=>{localStorage.removeItem(HISTORY_KEY);renderHistory();showToast('履歴を削除しました')});
 
-  function hhmm(iso){if(!iso)return '--:--';const d=new Date(iso);if(Number.isNaN(d.getTime()))return '--:--';return new Intl.DateTimeFormat('ja-JP',{hour:'2-digit',minute:'2-digit',second:'2-digit'}).format(d)}
-  function renderStatus(s){
-    const state=s?.state||'idle';
-    const progress=Math.max(0,Math.min(100,Number(s?.progress||0)));
-    progressBar.style.width=progress+'%';
-    progressValue.textContent=Math.round(progress)+'%';
-    statusTime.textContent=s?.updated_at?'更新 '+hhmm(s.updated_at):'--:--';
-    statusActions.classList.remove('show');
-    statusOrb.className='status-orb';
-    if(state==='selecting'){
-      statusTitle.textContent='Wordを選択してください';
-      statusStage.textContent=s?.message||'ショートカットで文字起こしWordを選択しています。';
-      statusOrb.textContent='＋';
-      progressBar.style.width='0%'; progressValue.textContent='0%';
-    }else if(state==='completed'){
-      statusTitle.textContent='議事録が完成しました';
-      statusStage.textContent=s?.message||'ExcelをDropboxへ保存しました。';
-      statusOrb.textContent='✓'; statusOrb.classList.add('ok'); progressBar.style.width='100%'; progressValue.textContent='100%'; statusActions.classList.add('show');
-    }else if(state==='failed'){
-      statusTitle.textContent='処理でエラーが発生しました';
-      statusStage.textContent=s?.message||'元のWordは未処理フォルダに残っています。';
-      statusOrb.textContent='!'; statusOrb.classList.add('err'); progressBar.style.width='100%'; progressValue.textContent='100%'; statusActions.classList.add('show');
-    }else if(state==='processing'||state==='starting'){
-      if(state==='starting' && progress<=12){
-        statusTitle.textContent='処理開始を確認中です';
-      }else{
-        statusTitle.textContent='AIが議事録を作成中です';
-      }
-      statusStage.textContent=s?.stage||s?.message||'処理中です。';
-      statusOrb.textContent='↻'; statusOrb.classList.add('spin');
-      document.getElementById('refreshStatus').parentElement.classList.add('show');
-    }else if(state==='not_started'){
-      statusTitle.textContent='処理開始を確認できません';
-      statusStage.textContent=s?.message||'Word選択がキャンセルされたか、送信に失敗した可能性があります。';
-      statusOrb.textContent='!'; statusOrb.classList.add('err');
-      progressBar.style.width='0%'; progressValue.textContent='0%';
-    }else if(state==='status_error'){
-      statusTitle.textContent='処理状況を再取得しています';
-      statusStage.textContent=s?.message||'通信状態を確認して自動で再取得します。';
-      statusOrb.textContent='↻'; statusOrb.classList.add('spin');
-      document.getElementById('refreshStatus').parentElement.classList.add('show');
-    }else if(state==='empty'){
-      statusTitle.textContent='処理対象のWordがありません';
-      statusStage.textContent=s?.message||'01_文字起こしに未処理Wordがありません。';
-      statusOrb.textContent='−'; progressBar.style.width='0%'; progressValue.textContent='0%'; statusActions.classList.add('show');
-    }else{
-      statusTitle.textContent='待機中';
-      statusStage.textContent='「議事録を作成」からWordを選択してください。';
-      statusOrb.textContent='•'; progressBar.style.width='0%'; progressValue.textContent='0%';
-    }
-  }
-
-  async function loadRemoteStatus(){
-    let lastError=null;
-    for(const base of STATUS_URLS){
-      try{
-        const sep=base.includes('?')?'&':'?';
-        const res=await fetch(base+sep+'t='+Date.now(),{cache:'no-store',mode:'cors'});
-        if(!res.ok)throw new Error('status '+res.status);
-        return await res.json();
-      }catch(e){lastError=e}
-    }
-    throw lastError||new Error('status fetch failed');
-  }
-
-  async function fetchStatus(){
-    try{
-      const s=await loadRemoteStatus();
-      lastStatusSyncAt=Date.now();
-      const localStart=localStorage.getItem(LAST_START_KEY);
-      if(localStart && s?.updated_at){
-        const a=new Date(localStart).getTime(), b=new Date(s.updated_at).getTime();
-        if(Number.isFinite(a)&&Number.isFinite(b)&&b+5000<a){
-          const elapsed=Date.now()-a;
-          if(elapsed<60000){
-            renderStatus({state:'starting',stage:'処理受付を確認中',progress:5,message:'Word選択後、クラウド側の処理開始を確認しています。',updated_at:localStart});
-          }else{
-            renderStatus({state:'not_started',stage:'処理未確認',progress:0,message:'処理開始を確認できません。Word選択をキャンセルした場合は、もう一度「議事録を作成」を押してください。',updated_at:localStart});
-          }
-          return;
-        }
-      }
-      renderStatus(s);
-      if(s?.state==='completed'||s?.state==='failed'||s?.state==='empty')localStorage.removeItem(LAST_START_KEY);
-    }catch(e){
-      const localStart=localStorage.getItem(LAST_START_KEY);
-      renderStatus({state:'status_error',stage:'状態取得待ち',progress:localStart?12:0,message:'処理状況を取得できません。数秒後に自動で再試行します。',updated_at:localStart||new Date().toISOString()});
-    }
-  }
-
-  function refreshStatusNow(){
-    fetchStatus();
-    setTimeout(fetchStatus,350);
-    setTimeout(fetchStatus,1200);
-    setTimeout(fetchStatus,3000);
-  }
-
-
-  document.getElementById('openDoneFromStatus').addEventListener('click',()=>runShortcut(DONE_SHORTCUT));
-  document.getElementById('refreshStatus').addEventListener('click',()=>{showToast('状態を更新します');fetchStatus()});
-
   function updateNet(){const on=navigator.onLine;document.getElementById('netDot').classList.toggle('off',!on);document.getElementById('netText').textContent=on?'オンライン':'オフライン'}
-  addEventListener('online',()=>{updateNet();refreshStatusNow()});
-  addEventListener('offline',updateNet);
-  addEventListener('pageshow',refreshStatusNow);
-  addEventListener('focus',refreshStatusNow);
-  document.addEventListener('visibilitychange',()=>{if(!document.hidden)refreshStatusNow()});
-  document.addEventListener('touchstart',()=>{if(Date.now()-lastStatusSyncAt>5000)fetchStatus()},{passive:true});
-  updateNet();renderHistory();refreshStatusNow();
-  setInterval(()=>{if(!document.hidden)fetchStatus()},3000);
+  addEventListener('online',updateNet);addEventListener('offline',updateNet);updateNet();renderHistory();
+
   const standalone=window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone===true;if(!standalone)document.getElementById('installBox').classList.add('show');
-  if('serviceWorker' in navigator)navigator.serviceWorker.register('./sw.js?v=6').catch(()=>{});
+  if('serviceWorker' in navigator)navigator.serviceWorker.register('./sw.js?v=8').catch(()=>{});
 </script>
 </body>
 </html>
