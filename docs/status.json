@@ -1,7 +1,7 @@
 {
   "state": "processing",
-  "stage": "Excelを作成中",
-  "progress": 86,
-  "message": "雛形へ内容を反映し、レイアウトを調整しています。",
-  "updated_at": "2026-10-08T20:49:56.903142+09:00"
+  "stage": "Dropboxへ保存中",
+  "progress": 95,
+  "message": "完成したExcelをDropboxへ保存しています。",
+  "updated_at": "2026-10-08T20:49:58.578857+09:00"
 }
