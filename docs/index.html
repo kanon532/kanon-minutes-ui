@@ -65,8 +65,8 @@
         <h2>押す。選ぶ。<br>あとはAI。</h2>
         <p>文字起こしWordを選ぶだけ。会話整理、物件情報・締切の照合、提出用Excel作成まで自動処理します。</p>
         <div class="cta">
-          <a class="btn primary" href="#" data-shortcut="カノン議事録AI 作成">＋ 議事録を作成</a>
-          <a class="btn secondary" href="#" data-shortcut="カノン議事録AI 確認">完成議事録を開く</a>
+          <a class="btn primary" href="#" data-shortcut="議事録作成">＋ 議事録を作成</a>
+          <a class="btn secondary" href="#" data-shortcut="完成議事録">完成議事録を開く</a>
         </div>
         <div id="installBox" class="install"><strong>ホーム画面に追加できます。</strong><br>Safariの共有ボタン →「ホーム画面に追加」で、通常のアプリのように起動できます。</div>
       </div>
@@ -113,8 +113,8 @@
     <section id="settings" class="view">
       <div class="panel-head"><div><h2>設定</h2><p>アプリ本体とショートカットの接続設定</p></div></div>
       <div class="card">
-        <div class="setting-row"><div><b>議事録作成ショートカット</b><small>Word選択 → Dropbox → AI処理開始</small></div><span class="pill">カノン議事録AI 作成</span></div>
-        <div class="setting-row"><div><b>完成議事録ショートカット</b><small>03_完成議事録を開く</small></div><span class="pill">カノン議事録AI 確認</span></div>
+        <div class="setting-row"><div><b>議事録作成ショートカット</b><small>Word選択 → Dropbox → AI処理開始</small></div><span class="pill">議事録作成</span></div>
+        <div class="setting-row"><div><b>完成議事録ショートカット</b><small>03_完成議事録を開く</small></div><span class="pill">完成議事録</span></div>
         <div class="setting-row"><div><b>認証情報</b><small>Web UIにはGitHub PATやDropboxトークンを保存しません</small></div><span class="pill">端末内</span></div>
         <div class="setting-row"><div><b>PWA</b><small>Safariからホーム画面へ追加してアプリ表示</small></div><span class="pill">対応</span></div>
       </div>
@@ -138,8 +138,8 @@
 <div id="toast" class="toast"></div>
 <script>
   const HISTORY_KEY='kanon_minutes_launch_history_simple_v1';
-  const CREATE_SHORTCUT='カノン議事録AI 作成';
-  const DONE_SHORTCUT='カノン議事録AI 確認';
+  const CREATE_SHORTCUT='議事録作成';
+  const DONE_SHORTCUT='完成議事録';
   const views=[...document.querySelectorAll('.view')];
   const navs=[...document.querySelectorAll('.navbtn')];
   const toast=document.getElementById('toast');
