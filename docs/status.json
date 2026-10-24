@@ -1,7 +1,7 @@
 {
-  "state": "processing",
-  "stage": "AIが会話を整理中",
-  "progress": 38,
-  "message": "会話を読み取り、発言の流れを整理しています。",
-  "updated_at": "2026-10-24T10:47:01.551814+09:00"
+  "state": "failed",
+  "stage": "エラー",
+  "progress": 100,
+  "message": "処理に失敗しました。元のWordは01_文字起こしに残っています。",
+  "updated_at": "2026-10-24T10:47:09.171778+09:00"
 }
